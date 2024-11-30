@@ -1,0 +1,81 @@
+basePath: /
+definitions:
+  main.Item:
+    properties:
+      price:
+        example: "0"
+        type: string
+      shortDescription:
+        type: string
+    type: object
+  main.Receipt:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/main.Item'
+        type: array
+      purchaseDate:
+        type: string
+      purchaseTime:
+        type: string
+      retailer:
+        type: string
+      total:
+        example: "0"
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for processing receipts.
+  title: Receipt Processor API
+  version: "1.0"
+paths:
+  /receipts/{receipt_id}/points:
+    get:
+      description: Get points for a given receipt ID
+      parameters:
+      - description: Receipt ID
+        in: path
+        name: receipt_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get points for a receipt
+  /receipts/process:
+    post:
+      consumes:
+      - application/json
+      description: Process a receipt and return a unique ID
+      parameters:
+      - description: Receipt
+        in: body
+        name: receipt
+        required: true
+        schema:
+          $ref: '#/definitions/main.Receipt'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Process a receipt
+swagger: "2.0"

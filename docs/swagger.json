@@ -1,0 +1,123 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server for processing receipts.",
+        "title": "Receipt Processor API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/receipts/process": {
+            "post": {
+                "description": "Process a receipt and return a unique ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Process a receipt",
+                "parameters": [
+                    {
+                        "description": "Receipt",
+                        "name": "receipt",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Receipt"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/receipts/{receipt_id}/points": {
+            "get": {
+                "description": "Get points for a given receipt ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get points for a receipt",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Receipt ID",
+                        "name": "receipt_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.Item": {
+            "type": "object",
+            "properties": {
+                "price": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "shortDescription": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.Receipt": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.Item"
+                    }
+                },
+                "purchaseDate": {
+                    "type": "string"
+                },
+                "purchaseTime": {
+                    "type": "string"
+                },
+                "retailer": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "string",
+                    "example": "0"
+                }
+            }
+        }
+    }
+}
